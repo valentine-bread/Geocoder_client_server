@@ -13,16 +13,17 @@ QUrl Service_Ya::request(const QString *q)
   return url;
 }
 
-coordinate Service_Ya::reply(const QJsonDocument* doc)
+QGeoLocation Service_Ya::reply(const QJsonDocument* doc)
 {
+  QGeoLocation loc;
+  QGeoAddress addr;
   QJsonObject tmp;
   QJsonArray arr;
   QJsonObject label_tmp;
-  QString label = "No result";
   //qDebug() << "Ya";
   if(doc->object().value("statusCode").toInt() != 0){
       qDebug() <<"Ya" << doc->object().value("error").toString() << doc->object().value("message").toString();
-      return coordinate{label, -1, -1};
+      return loc;
     }
   tmp = doc->object().value("response").toObject();
   tmp = tmp.value("GeoObjectCollection").toObject();
@@ -31,18 +32,19 @@ coordinate Service_Ya::reply(const QJsonDocument* doc)
   label_tmp = tmp;
   label_tmp = label_tmp.value("metaDataProperty").toObject();
   label_tmp = label_tmp.value("GeocoderMetaData").toObject();
-  label = label_tmp.value("text").toString();
+  addr.setText(label_tmp.value("text").toString());
   if(arr.size() == 0) {
       qDebug() << "Ya no result";
-      return coordinate{label, -1, -1};
+      return loc;
     }
   tmp = tmp.value("Point").toObject();
   QString result = tmp.value("pos").toString();
   QRegExp rx("(\\d+.\\d+) (\\d+.\\d+)");
   rx.indexIn(result);
-  //qDebug() << rx.cap(2).toDouble() << " " << rx.cap(1).toDouble();
-
-  return coordinate{label, rx.cap(2).toDouble(), rx.cap(1).toDouble()};
+  //qDebug() << get_service_name() << " " << label << rx.cap(2).toDouble() << " " << rx.cap(1).toDouble();
+  loc.setAddress(addr);
+  loc.setCoordinate(QGeoCoordinate(rx.cap(2).toDouble(), rx.cap(1).toDouble(),0));
+  return loc;
 }
 
 QString Service_Ya::get_service_name()

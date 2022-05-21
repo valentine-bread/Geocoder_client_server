@@ -36,21 +36,25 @@ void MyTcpServer::onReadyRead()
         {
         default:
           qDebug() << "Unknown data type.";
-        case geocoding_addres_list:
+        case geocoding_address_list:
           {
-            geocoder->geocoding_list(doc.object().value("service_check").toObject().toVariantMap(),doc.object().value("addres_list").toArray().toVariantList());
+            geocoder->geocoding_list(doc.object().value("service_check").toObject().toVariantMap(),doc.object().value("address_list").toArray().toVariantList());
             tmp_socket->waitForBytesWritten(500);
             break;
           }
-        case service_key:
+        case get_service_key:
           {
             QJsonObject obj_rez;
-            obj_rez.insert("type",service_key);
+            obj_rez.insert("type",get_service_key);
             obj_rez.insert("service_list", QJsonArray::fromVariantList(geocoder->get_all_service_name()));
             obj_rez.insert("service_API_key", QJsonObject::fromVariantMap(geocoder->get_all_API_key()));
             tmp_socket->write(QJsonDocument(obj_rez).toJson());
             tmp_socket->waitForBytesWritten(500);
             qDebug() << obj_rez;
+          }
+        case set_service_key:
+          {
+            geocoder->download_API_key(doc.object().value("service_key").toObject().toVariantMap());
           }
         }
     }
@@ -72,7 +76,7 @@ void MyTcpServer::onfinish_geocoding_all(QJsonDocument &rez)
 {
   QTcpSocket* tmp_socket =  qobject_cast<My_Geocode*>(sender())->socket;
   QJsonObject obj = rez.object();
-  obj.insert("type",geocoding_addres_list);
+  obj.insert("type",geocoding_address_list);
   rez.setObject(obj);
   QByteArray itog(rez.toJson());
   tmp_socket->write("{\"type\":" + QByteArray::number(size) + ",\"data\":\""+ QByteArray::number(itog.size()) + "}" +"\"}}"); //отправка размера сообщения

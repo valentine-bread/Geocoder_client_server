@@ -7,14 +7,7 @@ QT += quickcontrols2
 
 SOURCES += \
 main.cpp \
-my_geocode.cpp \
-service.cpp \
-        service/service_mapbox.cpp \
-	service/service_osm.cpp \
-	service/service_ya.cpp \
-	service/service_mapbox.cpp \
-	service/service_osm.cpp \
-	service/service_ya.cpp
+    mycore.cpp
 
 RESOURCES += qml.qrc
 
@@ -30,14 +23,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    including.h \
-    my_geocode.h \
-    service.h \
-    service/service_mapbox.h \
-    service/service_osm.h \
-    service/service_ya.h \
-    service/service_mapbox.h \
-    service/service_osm.h \
-    service/service_ya.h
+    mycore.h
 
 DISTFILES +=

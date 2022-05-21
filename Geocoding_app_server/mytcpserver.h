@@ -2,7 +2,7 @@
 #define MYTCPSERVER_H
 
 #include "including.h"
-#include "my_geocode.h"
+#include "mygeocode.h"
 
 class MyTcpServer : public QTcpServer
 {
@@ -10,7 +10,7 @@ class MyTcpServer : public QTcpServer
 
 public:
   explicit MyTcpServer(QObject *parent = nullptr);
-  enum Command{test, geocoding_addres_list, size, service_key};
+  enum Command{test, geocoding_address_list, size, set_service_key, get_service_key};
 
 private:
   void incomingConnection(qintptr handle);

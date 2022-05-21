@@ -8,7 +8,7 @@ import QtQuick.Dialogs 1.3
 import Qt.labs.qmlmodels 1.0
 
 Item {
-    id: addres_list_item
+    id: address_list_item
     //anchors.left: parent.left
     //anchors.right: parent.right
     width: parent.width
@@ -22,8 +22,8 @@ Item {
         anchors.margins: 5
         text: "X"
         onClicked: {
-            addres_listModel.remove(index)
-            console.log(addres);
+            address_listModel.remove(index)
+            console.log(address);
         }
     }
     Text {
@@ -37,6 +37,6 @@ Item {
         font.pointSize: 12
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: TextInput.AlignTop
-        text: addres;
+        text: address;
     }
 }

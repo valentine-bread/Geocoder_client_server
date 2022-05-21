@@ -10,7 +10,7 @@ class Service_OSM : public Service
 private:
   QString get_service_name();
   QUrl request(const QString* q);
-  coordinate reply(const QJsonDocument* doc);
+  QGeoLocation reply(const QJsonDocument* doc);
 
 };
 

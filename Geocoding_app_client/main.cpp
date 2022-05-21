@@ -1,6 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include "my_geocode.h"
+#include "mycore.h"
 #include <QQmlContext>
 #include <QQuickStyle>
 
@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
   }, Qt::QueuedConnection);
 
   My_Geocode code;
-  code.load_API_key();
+  //code.load_API_key();
   context->setContextProperty("Geocode", &code);
 
   engine.load(url);

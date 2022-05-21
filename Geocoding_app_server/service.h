@@ -10,7 +10,7 @@ public:
   explicit Service(QObject *parent = nullptr);
   ~Service();
   virtual QUrl request(const QString* q) = 0;
-  virtual coordinate reply(const QJsonDocument* doc) = 0;
+  virtual QGeoLocation reply(const QJsonDocument* doc) = 0;
   virtual QString get_service_name() = 0;
   const int get_time();
   void geocoding();

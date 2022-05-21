@@ -76,7 +76,7 @@ Window {
         }
     }
 
-    MyButton {
+    Button {
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         height: 40
@@ -88,7 +88,7 @@ Window {
                 //console.log(service_marker_сolour.get(i).service + " " + service_marker_сolour.get(i).key);
                 key_map[service_marker_сolour.get(i).service] = service_marker_сolour.get(i).key;
             }
-            Geocode.download_API_key(key_map);
+            Geocode.load_API_key(key_map);
         }
     }
     /*onClosingChanged: {

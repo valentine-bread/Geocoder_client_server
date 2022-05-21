@@ -16,26 +16,28 @@ QUrl Service_MapBox::request(const QString* q)
   return url;
 }
 
-coordinate Service_MapBox::reply(const QJsonDocument* doc)
+QGeoLocation Service_MapBox::reply(const QJsonDocument* doc)
 {
+  QGeoLocation loc;
+  QGeoAddress addr;
   QJsonObject tmp;
   QJsonArray arr;
-  QString label = "No result";
   //qDebug() << "Mapbox \t";
   if(doc->object().value("message").toString() != ""){
       qDebug() << "MapBox" << doc->object().value("message").toString();
-      return coordinate{label, -1, -1};
+      return loc;
     }
   arr = doc->object().value("features").toArray();
   if(arr.size() == 0){
       qDebug() << "No result.";
-      return coordinate{label, -1, -1};
+      return loc;
     }
   tmp = arr.at(0).toObject().value("geometry").toObject();
-  label = arr.at(0).toObject().value("place_name").toString();
+  addr.setText(arr.at(0).toObject().value("place_name").toString());
   arr = tmp.value("coordinates").toArray();
-  //qDebug() << arr[1].toDouble() << arr[0].toDouble();
-
-  return coordinate{label, arr[1].toDouble(), arr[0].toDouble()};
+  //qDebug() << get_service_name() << " " << label << arr[1].toDouble() << arr[0].toDouble();
+  loc.setAddress(addr);
+  loc.setCoordinate(QGeoCoordinate(arr[1].toDouble(),arr[0].toDouble(),0));
+  return loc;
 
 }

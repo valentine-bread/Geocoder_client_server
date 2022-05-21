@@ -5,7 +5,7 @@ QT += location core network
 
 SOURCES += \
         main.cpp \
-        my_geocode.cpp \
+        mygeocode.cpp \
         mytcpserver.cpp \
         service.cpp \
         service/service_mapbox.cpp \
@@ -14,7 +14,7 @@ SOURCES += \
 
 HEADERS += \
     including.h \
-    my_geocode.h \
+    mygeocode.h \
     mytcpserver.h \
     service.h \
     service/service_mapbox.h \

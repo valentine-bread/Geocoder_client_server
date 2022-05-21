@@ -29,7 +29,7 @@ ApplicationWindow  {
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.bottom: parent.bottom
-            anchors.right: table_addres.left
+            anchors.right: table_address.left
             copyrightsVisible: false
             MapItemGroup
             {
@@ -38,7 +38,7 @@ ApplicationWindow  {
                         id: marker_list
                         onCountChanged: {
                             mapview.fitViewportToVisibleMapItems();
-                            mapview.zoomLevel - 0.5;
+                            //mapview.zoomLevel;
                         }
                     }
 
@@ -60,26 +60,26 @@ ApplicationWindow  {
         }
 
         Rectangle {
-            id:table_addres
+            id:table_address
             width: parent.width * 0.20 + 100
             anchors.right: parent.right
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            MyAddres_row {
-                id: addres_row
+            MyAddress_row {
+                id: address_row
             }
 
             ListView {
-                id: addres_list
+                id: address_list
                 anchors.right: parent.right
                 anchors.left: parent.left
-                anchors.top: addres_row.bottom
+                anchors.top: address_row.bottom
                 anchors.bottom: parent.bottom
-                delegate: MyAddres_list_item {
-                    id: addres_list_item
+                delegate: MyAddress_list_item {
+                    id: address_list_item
                 }
                 model: ListModel {
-                    id: addres_listModel
+                    id: address_listModel
                 }
             }
         }
@@ -109,34 +109,52 @@ ApplicationWindow  {
         for(var i = 0; i !== s.length; i++){
             service_marker_сolour.append({сolour : c[i % 4].toString(), service : s[i].toString(), key : key[s[i].toString()], check : true});
             service_сolour[s[i].toString()] = c[i % 4].toString();
-
-
         }
         //console.log("service" + service_marker_сolour.count);
     }
 
-    Connections {
+    Connections{
         target: Geocode
-        onGetcode: {
-            onGetcode(name,addres,lat,lon);
+        onGetcode:{
+            onGetcode(name,address);
         }
     }
+
+    function onGetcode(name,address){
+        for(var i = 0; i !== address.length; i++){
+            var tmp = address[i];
+            var s =  name + "\r\n" + tmp.address + "\r\n" + tmp.lat + "\r\n" + tmp.lon;
+            if(tmp.address !== "No result"){
+                marker_list.append({lat : tmp.lat, lon: tmp.lon, line : s, сolour: service_сolour[name.toString()]});
+            }
+            process_indicator.value += (1 / (number_requests));
+        }
+        //mapview.fitViewportToVisibleMapItems();
+    }
+
+
     Connections {
         target: Geocode
         onFinish_download_key: {
-            console.log("finish");
+            //console.log("finish");
             on_Completed();
         }
     }
 
-    function onGetcode(name,addres,lat,lon){
-        var s =  name + "\r\n" + addres + "\r\n" + lat + "\r\n" + lon
+    /*Connections {
+        target: Geocode
+        onGetcode: {
+            onGetcode(name,address,lat,lon);
+        }
+    }*/
+    /*function onGetcode(name,address,lat,lon){
+        var s =  name + "\r\n" + address + "\r\n" + lat + "\r\n" + lon
         if(name !== "No result"){
             marker_list.append({lat : lat, lon: lon, line : s, сolour: service_сolour[name.toString()]});
         }
         //mapview.zoomLevel--;
         //mapview.fitViewportToVisibleMapItems();
         process_indicator.value += (1 / (number_requests));
-    }
+    }*/
 
 }

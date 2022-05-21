@@ -16,11 +16,13 @@
 #include <QTime>
 #include <QTcpServer>
 #include <QTcpSocket>
+#include <QGeoAddress>
+#include <QGeoLocation>
+#include <QGeoCoordinate>
 
 struct coordinate{
-  QString addres;
-  double lat;
-  double lon;
+  QString address;
+  QGeoLocation location;
 };
 
 #endif // INCLUDING_H

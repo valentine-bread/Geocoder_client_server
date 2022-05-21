@@ -8,7 +8,7 @@ import QtQuick.Dialogs 1.3
 import Qt.labs.qmlmodels 1.0
 
 Rectangle{
-    id:rect_addres
+    id:rect_address
     property string text_in: ""
     signal finish_edit()
     width: (parent.width - 100)
@@ -20,7 +20,7 @@ Rectangle{
     //onFinish_edit:{}
 
     TextInput{
-        id:addres_text_text
+        id:address_text_text
         anchors.fill: parent
         font.pointSize: 12
         text: text_in
@@ -28,8 +28,8 @@ Rectangle{
         selectByMouse: true
         verticalAlignment: TextInput.AlignTop
         onEditingFinished: {
-            rect_addres.text_in = text
-            rect_addres.finish_edit();
+            rect_address.text_in = text
+            rect_address.finish_edit();
         }
     }
 }

@@ -11,7 +11,7 @@ private:
   QString get_service_name();
   //const QString API_token = "pk.eyJ1IjoidmFsZW50aW5ldiIsImEiOiJja3k1MWx4OGMwaGJ6MndwdmY5YzFuMXp2In0.5N_zjKOJw3tF4HXpZ6U8hg";
   QUrl request(const QString* q);
-  coordinate reply(const QJsonDocument* doc);
+  QGeoLocation reply(const QJsonDocument* doc);
 };
 
 #endif

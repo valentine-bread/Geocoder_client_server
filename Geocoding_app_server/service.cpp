@@ -13,18 +13,13 @@ Service::~Service()
   delete manager;
 }
 
-const int Service::get_time()
-{
-  return time_execution;
-}
-
 void Service::geocoding_list(const QVariantList& q)
 {
   timer = QTime::currentTime();
   if(q.isEmpty()) return;
   rez_data->clear();
   for(auto &x : (q)){
-      rez_data->push_back(coordinate{x.toString(),-1,-1});
+      rez_data->push_back(coordinate{x.toString()});
     }
   counter = rez_data->begin();
   this->geocoding();
@@ -32,7 +27,7 @@ void Service::geocoding_list(const QVariantList& q)
 
 void Service::geocoding()
 {  
-  QNetworkRequest _request(request(&counter->addres));
+  QNetworkRequest _request(request(&counter->address));
   _request.setRawHeader("Accept-Language", "ru");
   manager->get(_request);
 }
@@ -43,10 +38,8 @@ void Service::slot_manager(QNetworkReply *rez)
       QJsonParseError docErr;
       QJsonDocument doc = QJsonDocument::fromJson(rez->readAll(),&docErr);
       if (docErr.error == QJsonParseError::NoError){
-          coordinate code = reply(&doc);
-          counter->lat = code.lat;
-          counter->lon = code.lon;
-          counter->addres = code.addres;
+          QGeoLocation code = reply(&doc);
+          counter->location = code;
           //qDebug() << get_service_name() << " " <<  code.lat << " " << code.lon;
         }
       else
@@ -62,6 +55,11 @@ void Service::slot_manager(QNetworkReply *rez)
     }
   else
       geocoding();
+}
+
+const int Service::get_time()
+{
+  return time_execution;
 }
 
 QList<coordinate>* Service::get_rez_data()

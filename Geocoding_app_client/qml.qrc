@@ -3,11 +3,10 @@
         <file>main.qml</file>
         <file>MyGeoMarcker.qml</file>
         <file>MyMenu_bar.qml</file>
-        <file>MyAddres_row.qml</file>
-        <file>MyAddres_list_item.qml</file>
+        <file>MyAddress_row.qml</file>
+        <file>MyAddress_list_item.qml</file>
         <file>MyLegend.qml</file>
         <file>MySelect_service_window.qml</file>
         <file>MyTexyInput.qml</file>
-        <file>MyButton.qml</file>
     </qresource>
 </RCC>

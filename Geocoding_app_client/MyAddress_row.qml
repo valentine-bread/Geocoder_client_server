@@ -8,14 +8,14 @@ import QtQuick.Dialogs 1.3
 import Qt.labs.qmlmodels 1.0
 
 Row {
-    id: addres_row
+    id: address_row
     height: 50
     anchors.top: parent.top
     anchors.left: parent.left
     anchors.right: parent.right
 
    /*Rectangle{
-        id:rect_addres
+        id:rect_address
         width: (parent.width - 100)
         height: 30
         //anchors.left: parent.left
@@ -23,7 +23,7 @@ Row {
         border.width: 1
         clip: true
         TextInput{
-            id:addres_text
+            id:address_text
             anchors.fill: parent
             font.pointSize: 12
             text: "Moscow"
@@ -33,15 +33,15 @@ Row {
         }
     }*/
     MyTexyInput {
-        id: addres_text
+        id: address_text
     }
-    MyButton{
+    Button{
         id:button
         text: "ADD"
         width: 100
         height: 30
         onClicked: {
-            addres_listModel.append({addres: addres_text.text_in})
+            address_listModel.append({address: address_text.text_in})
 
         }
     }

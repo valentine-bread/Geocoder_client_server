@@ -38,18 +38,18 @@ MenuBar{
                 marker_list.clear();
                 process_indicator.value = 0;
                 number_requests = 0;
-                var map_addres = [];
-                for(var i = 0; i !== addres_listModel.count; i++){
-                    map_addres.push(addres_listModel.get(i).addres);
+                var map_address = [];
+                for(var i = 0; i !== address_listModel.count; i++){
+                    map_address.push(address_listModel.get(i).address);
                 }
                 var map_chack = {};
                 for(i = 0; i !== service_marker_сolour.count; i++){
                     map_chack[service_marker_сolour.get(i).service] = service_marker_сolour.get(i).check;
                     if(service_marker_сolour.get(i).check === true){
-                        number_requests += addres_listModel.count;
+                        number_requests += address_listModel.count;
                     }
                 }
-                Geocode.set_addres_list(map_addres);
+                Geocode.set_address_list(map_address);
                 Geocode.geocoding_list(map_chack);
                 //Geocode.geocoding_test();
 
@@ -76,9 +76,9 @@ MenuBar{
             if(type == 0){
                 console.log("You chose: " + fileDialog_data.fileUrl);
                 var l = Geocode.load_in_file((fileDialog_data.fileUrl.toString()));
-                addres_listModel.clear();
+                address_listModel.clear();
                 for(var i = 0; i !== l.length; i++){
-                    addres_listModel.append({addres: l[i] + ""});
+                    address_listModel.append({address: l[i] + ""});
                 }
             }
             else if(type == 1){

@@ -1,5 +1,5 @@
-#ifndef MY_GEOCODE_H
-#define MY_GEOCODE_H
+#ifndef MYGEOCODE_H
+#define MYGEOCODE_H
 
 #include "including.h"
 #include "service/service_osm.h"
@@ -19,7 +19,7 @@ public:
   void geocoding_list(const QVariantMap&, const QVariantList&);
   //void geocoding_test();
   //QVariantList load_in_file(const QString);
-  //void set_addres_list(QVariantList);
+  //void set_address_list(QVariantList);
   //void get_rez(const QUrl&);
   QVariantList get_all_service_name();
   QVariantMap get_all_API_key();
@@ -31,15 +31,15 @@ public:
 private:
   QList<Service*> service_list;
   unsigned int finish_flag;
-  //QVariantList* addres_mas;
+  //QVariantList* address_mas;
 
 private slots:
   void onfinish_geocoding_list(Service*);
 
 signals:
   //void GeocodeChanged();
-  //void getcode(QString name, QString addres, double lat, double lon);
+  //void getcode(QString name, QString address, double lat, double lon);
   void finish_geocoding_all(QJsonDocument&);
 };
 
-#endif // MY_GEOCODE_H
+#endif // MYGEOCODE_H

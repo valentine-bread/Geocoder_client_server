@@ -11,12 +11,13 @@ QUrl Service_OSM::request(const QString *q)
   return url;
 }
 
-coordinate Service_OSM::reply(const QJsonDocument* doc)
+QGeoLocation Service_OSM::reply(const QJsonDocument* doc)
 {
+  QGeoLocation loc;
+  QGeoAddress addr;
   QJsonObject tmp;
   QJsonObject label_tmp;
   QJsonArray arr;
-  QString label = "No result";
   //qDebug() << "OSM \t";
   if(doc->object().value("status").toInt() != 0){
       qDebug() << "OSM" << doc->object().value("message").toString();
@@ -24,15 +25,17 @@ coordinate Service_OSM::reply(const QJsonDocument* doc)
   arr = doc->object().value("features").toArray();
   if(arr.size() == 0){
       qDebug() << "OSM no result.";;
-      return coordinate{label, -1, -1};
+      return loc;
     }
   tmp = arr.at(0).toObject().value("geometry").toObject();
   label_tmp = arr.at(0).toObject().value("properties").toObject();
   label_tmp =  label_tmp.value("geocoding").toObject();
-  label = label_tmp.value("label").toString();
+  addr.setText(label_tmp.value("label").toString());
   arr = tmp.value("coordinates").toArray();
-  //qDebug() << arr[1].toDouble() << " " << arr[0].toDouble();
-  return coordinate{label, arr[1].toDouble(), arr[0].toDouble()};
+  //qDebug() << get_service_name() << " " << label << arr[1].toDouble() << " " << arr[0].toDouble();
+  loc.setAddress(addr);
+  loc.setCoordinate(QGeoCoordinate(arr[1].toDouble(), arr[0].toDouble(),0));
+  return loc;
 }
 
 QString Service_OSM::get_service_name()
