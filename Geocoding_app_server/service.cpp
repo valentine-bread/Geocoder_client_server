@@ -11,23 +11,46 @@ Service::Service(QObject *parent)
 Service::~Service()
 {
   delete manager;
+  delete rez_data;
 }
 
-void Service::geocoding_list(const QVariantList& q)
+void Service::geocoding_list(const QVariantList& q, const QString& type)
 {
   timer = QTime::currentTime();
   if(q.isEmpty()) return;
   rez_data->clear();
-  for(auto &x : (q)){
-      rez_data->push_back(coordinate{x.toString()});
+  if(type == "direct"){
+    type_geocoding = 0;
+    for(auto &x : (q)){
+        rez_data->push_back(coordinate{x.toString()});
+      }
+    counter = rez_data->begin();
+    this->direct_geocoding();
     }
-  counter = rez_data->begin();
-  this->geocoding();
+  else{
+    type_geocoding = 1;
+
+    for(auto &x : (q)){
+        QJsonObject obj = x.toJsonObject();
+        rez_data->push_back(coordinate{x.toString(),obj.value("lat").toDouble(),obj.value("lon").toDouble()});
+      }
+    counter = rez_data->begin();
+    this->reverse_geocoding();
+    }
 }
 
-void Service::geocoding()
+void Service::direct_geocoding()
 {  
-  QNetworkRequest _request(request(&counter->address));
+  QNetworkRequest _request(direct_request(counter->address));
+  _request.setRawHeader("Accept-Language", "ru");
+  manager->get(_request);
+}
+
+void Service::reverse_geocoding()
+{
+  qDebug() << reverse_request(counter->lat,counter->lon);
+
+  QNetworkRequest _request(reverse_request(counter->lat,counter->lon));
   _request.setRawHeader("Accept-Language", "ru");
   manager->get(_request);
 }
@@ -37,6 +60,7 @@ void Service::slot_manager(QNetworkReply *rez)
   if(rez->error() == QNetworkReply::NoError){
       QJsonParseError docErr;
       QJsonDocument doc = QJsonDocument::fromJson(rez->readAll(),&docErr);
+      qDebug() << doc;
       if (docErr.error == QJsonParseError::NoError){
           QGeoLocation code = reply(&doc);
           counter->location = code;
@@ -54,7 +78,8 @@ void Service::slot_manager(QNetworkReply *rez)
       emit finish_geocoding_list(this);
     }
   else
-      geocoding();
+    if(type_geocoding) this->reverse_geocoding();
+        else this->direct_geocoding();
 }
 
 const int Service::get_time()

@@ -23,59 +23,6 @@ My_Geocode::~My_Geocode()
   delete socket;
 }
 
-//void My_Geocode::setGeocode(QString){}
-
-/*void My_Geocode::geocoding_test()
-{
-  emit getcode("OpenStreetMap", "", 55.7504, 37.6175);
-  emit getcode("MapBox", "",55.7558, 37.6178);
-  emit getcode("YandexMap",  "", 55.7532, 37.6225);
-}*/
-
-/*QVariantList My_Geocode::load_in_file(QString path)
-{
-  if (path.isEmpty()) return *address_mas;
-  path.remove(0,8);
-  QFile f(path);
-  if(!f.open(QFile::ReadOnly | QIODevice::Text)) return *address_mas;
-  address_mas->clear();
-  while(!f.atEnd()){
-      auto line = f.readLine();
-      address_mas->push_back(line);
-    }
-  f.close();
-  qDebug() << "rez";
-  for(auto &x : *address_mas){
-      qDebug() << x.toString();
-    }
-  f.close();
-  return *address_mas;
-}*/
-
-/*void My_Geocode::set_address_list(QVariantList list)
-{
-  delete address_mas;
-  address_mas = new QVariantList(list);
-  for(auto &x : *address_mas)
-     qDebug() << x.toString();
-}*/
-
-/*void My_Geocode::get_rez(const QUrl &path)
-{
-  QFile f(path.fileName());
-
-  if(!f.open(QFile::WriteOnly | QIODevice::Text)) return;
-  QTextStream writeStream(&f);
-  for(auto &it : service_list){
-      auto rez = it->get_rez_data();
-      for(auto &x : *rez){
-          writeStream << x.address << " " << x.lat << " " << x.lon << "\n";
-        }
-      writeStream  << "\n";
-    }
-  f.close();
-}*/
-
 QVariantList My_Geocode::get_all_service_name()
 {
   QVariantList list;
@@ -159,18 +106,16 @@ void My_Geocode::onfinish_geocoding_list(Service* s)
     }
 }
 
-/*void My_Geocode::geocoding(QString q)
-{
-  //for(auto &it : service_list) it->geocoding_list(address_mas);
-}*/
 
-void My_Geocode::geocoding_list(const QVariantMap &check_map, const QVariantList& address_list)
+void My_Geocode::geocoding_list(const QVariantMap &check_map, const QVariantList& address_list,const QString& type)
 {
   finish_flag = 0;
   for(auto &it : service_list) {
       if(check_map.value(it->get_service_name()).toBool() == true){
         finish_flag++;
-        it->geocoding_list(address_list);
+        it->geocoding_list(address_list, type);
         }
     }
 }
+
+

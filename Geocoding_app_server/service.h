@@ -9,12 +9,14 @@ class Service : public QObject
 public:
   explicit Service(QObject *parent = nullptr);
   ~Service();
-  virtual QUrl request(const QString* q) = 0;
+  virtual QUrl direct_request(const QString& q) = 0;
+  virtual QUrl reverse_request(const double& lat, const double& lon) = 0;
   virtual QGeoLocation reply(const QJsonDocument* doc) = 0;
   virtual QString get_service_name() = 0;
   const int get_time();
-  void geocoding();
-  void geocoding_list(const QVariantList& q);
+  void direct_geocoding();
+  void reverse_geocoding();
+  void geocoding_list(const QVariantList&,const QString&);
   //void next_step(double lat = 0, double lon = 0);
   QList<coordinate>* get_rez_data();
   void set_API_key(QString key);
@@ -35,6 +37,7 @@ protected:
   QTime timer;
   QString API_key;
   int time_execution;
+  bool type_geocoding;
 };
 
 #endif // SERVICE_H

@@ -16,7 +16,7 @@ public:
   //QString Geocode();
   //void setGeocode(QString);
   //void geocoding(const QString);
-  void geocoding_list(const QVariantMap&, const QVariantList&);
+  void geocoding_list(const QVariantMap&, const QVariantList&, const QString&);
   //void geocoding_test();
   //QVariantList load_in_file(const QString);
   //void set_address_list(QVariantList);

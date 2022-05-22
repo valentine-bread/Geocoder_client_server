@@ -172,7 +172,7 @@ void My_Geocode::download_API_key()
   //for(auto &it : service_list) it->geocoding_list(address_mas);
 }*/
 
-void My_Geocode::geocoding_list(const QVariantMap &check_map)
+void My_Geocode::direct_geocoding_list(const QVariantMap &check_map)
 {  
   /*for(auto &it : service_list) {
       if(check_map.value(it->get_service_name()).toBool() == true)
@@ -180,10 +180,33 @@ void My_Geocode::geocoding_list(const QVariantMap &check_map)
     }*/
   QJsonObject obj_rez;
   obj_rez.insert("type",geocoding_address_list);
+  obj_rez.insert("geocoding_type", "direct");
   obj_rez.insert("service_check",QJsonObject::fromVariantMap(check_map));
   obj_rez.insert("address_list",QJsonArray::fromVariantList(*address_mas));
   socket->write(QJsonDocument(obj_rez).toJson());
   qDebug() << obj_rez;
+}
+
+void My_Geocode::reverse_geocoding_list(const QVariantMap &check_map)
+{
+  QJsonArray arr;
+  for(auto &x : *address_mas){
+      QRegExp rx(".*(\\d+\\.\\d+).*(\\d+\\.\\d+).*");
+      rx.indexIn(x.toString());
+      QJsonObject obj;
+      if(!rx.cap(1).isEmpty() && !rx.cap(2).isEmpty()){
+        obj.insert("lat",rx.cap(1).toDouble());
+        obj.insert("lon",rx.cap(2).toDouble());
+        arr.push_back(obj);
+        }
+      //qDebug() << rx.cap(1).toDouble() << " " << rx.cap(2).toDouble();
+    }
+  QJsonObject obj_rez;
+  obj_rez.insert("type",geocoding_address_list);
+  obj_rez.insert("geocoding_type", "reverse");
+  obj_rez.insert("service_check",QJsonObject::fromVariantMap(check_map));
+  obj_rez.insert("address_list",arr);
+  socket->write(QJsonDocument(obj_rez).toJson());
 }
 
 void My_Geocode::onReadyRead(){
@@ -237,11 +260,15 @@ void My_Geocode::onReadyRead(){
         case get_service_key:
           {
             QJsonArray arr = doc.object().value("service_list").toArray();
-            for(int i = 0; i < arr.size(); i++){
+            service_list.clear();
+            service_API_key.clear();
+            service_list = arr.toVariantList();
+            service_API_key = doc.object().value("service_API_key").toObject().toVariantMap();
+            /*for(int i = 0; i < arr.size(); i++){
                 service_list.push_back(arr[i].toString());
                 service_API_key.insert(arr[i].toString(),doc.object().value("service_API_key").toObject().value(arr[i].toString()).toString());
                 //qDebug() << arr[i].toString() << "   " <<doc.object().value("service_API_key").toObject().value(arr[i].toString()).toString();
-              }
+              }*/
             emit finish_download_key();
           }
         }
@@ -259,8 +286,8 @@ void My_Geocode::connection()
       timer->stop();
       download_API_key();
     }
-  else
-    qDebug("Not connect server.");
+  //else
+    //qDebug("Not connect server.");
 }
 
 void My_Geocode::onDisconnected()

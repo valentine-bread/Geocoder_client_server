@@ -10,8 +10,7 @@ import Qt.labs.qmlmodels 1.0
 Rectangle{
     id:rect_address
     property string text_in: ""
-    signal finish_edit()
-    width: (parent.width - 100)
+    signal finish_edit()    
     height: 30
     border.color: "black"
     border.width: 1

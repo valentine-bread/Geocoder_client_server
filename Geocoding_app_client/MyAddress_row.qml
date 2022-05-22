@@ -34,6 +34,7 @@ Row {
     }*/
     MyTexyInput {
         id: address_text
+        width: (parent.width - 100)
     }
     Button{
         id:button
@@ -41,8 +42,8 @@ Row {
         width: 100
         height: 30
         onClicked: {
-            address_listModel.append({address: address_text.text_in})
-
+            if(address_text.text_in !== "")
+                address_listModel.append({address: address_text.text_in})
         }
     }
 }

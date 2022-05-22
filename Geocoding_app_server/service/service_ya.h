@@ -10,7 +10,8 @@ class Service_Ya : public Service
 private:
   //const QString API_token = "963b0794-b2f0-48eb-899f-7b142ed4c21f";
   QString get_service_name();
-  QUrl request(const QString* q);
+  QUrl direct_request(const QString &q);
+  QUrl reverse_request(const double &lat, const double &lon);
   QGeoLocation reply(const QJsonDocument* doc);
 };
 

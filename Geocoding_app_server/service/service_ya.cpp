@@ -1,6 +1,6 @@
 #include "service_ya.h"
 
-QUrl Service_Ya::request(const QString *q)
+QUrl Service_Ya::direct_request(const QString &q)
 {
   QUrl url("https://geocode-maps.yandex.ru/1.x/");
   QUrlQuery query;
@@ -8,7 +8,20 @@ QUrl Service_Ya::request(const QString *q)
   query.addQueryItem("apikey", API_key);
   query.addQueryItem("results","1");
   query.addQueryItem("format","json");
-  query.addQueryItem("geocode",*q);
+  query.addQueryItem("geocode",q);
+  url.setQuery(query.query());
+  return url;
+}
+
+QUrl Service_Ya::reverse_request(const double  &lat, const double &lon)
+{
+  QUrl url("https://geocode-maps.yandex.ru/1.x/");
+  QUrlQuery query;
+  query.clear();
+  query.addQueryItem("apikey", API_key);
+  query.addQueryItem("results","1");
+  query.addQueryItem("format","json");
+  query.addQueryItem("geocode",(QString::number(lon) + "," + QString::number(lat)));
   url.setQuery(query.query());
   return url;
 }
@@ -38,9 +51,9 @@ QGeoLocation Service_Ya::reply(const QJsonDocument* doc)
       return loc;
     }
   tmp = tmp.value("Point").toObject();
-  QString result = tmp.value("pos").toString();
+  //QString result = tmp.value("pos").toString();
   QRegExp rx("(\\d+.\\d+) (\\d+.\\d+)");
-  rx.indexIn(result);
+  rx.indexIn(tmp.value("pos").toString());
   //qDebug() << get_service_name() << " " << label << rx.cap(2).toDouble() << " " << rx.cap(1).toDouble();
   loc.setAddress(addr);
   loc.setCoordinate(QGeoCoordinate(rx.cap(2).toDouble(), rx.cap(1).toDouble(),0));

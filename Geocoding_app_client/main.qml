@@ -13,9 +13,10 @@ ApplicationWindow  {
     height: 512
     visible: true
     property int number_requests : 0
-
-
-    property var service_сolour: []
+    property var service_сolour: []    
+    ListModel{
+        id:service_marker_сolour
+    }
     menuBar: MyMenu_bar {
         id: menu_bar
     }
@@ -89,29 +90,17 @@ ApplicationWindow  {
         }
     }
 
-    ListModel{
-        id:service_marker_сolour
-    }
 
-    Component.onCompleted: {
+
+    /*Component.onCompleted: {
         on_Completed();
-    }
+    }*/
 
     MySelect_service_window {
         id: select_service_window
     }
 
-    function on_Completed(){
-        service_marker_сolour.clear();
-        var s = Geocode.get_all_service_name();
-        var key = Geocode.get_all_API_key();
-        var c = ["red", "green", "blue" , "yellow"]
-        for(var i = 0; i !== s.length; i++){
-            service_marker_сolour.append({сolour : c[i % 4].toString(), service : s[i].toString(), key : key[s[i].toString()], check : true});
-            service_сolour[s[i].toString()] = c[i % 4].toString();
-        }
-        //console.log("service" + service_marker_сolour.count);
-    }
+
 
     Connections{
         target: Geocode
@@ -129,32 +118,27 @@ ApplicationWindow  {
             }
             process_indicator.value += (1 / (number_requests));
         }
-        //mapview.fitViewportToVisibleMapItems();
+        mapview.fitViewportToVisibleMapItems();
     }
 
 
     Connections {
         target: Geocode
         onFinish_download_key: {
-            //console.log("finish");
             on_Completed();
         }
     }
 
-    /*Connections {
-        target: Geocode
-        onGetcode: {
-            onGetcode(name,address,lat,lon);
+    function on_Completed(){
+        service_marker_сolour.clear();
+        service_сolour = [];
+        var s = Geocode.get_all_service_name();
+        var key = Geocode.get_all_API_key();
+        var c = ["red", "green", "blue" , "yellow"]
+        for(var i = 0; i !== s.length; i++){
+            service_marker_сolour.append({сolour : c[i % 4].toString(), service : s[i].toString(), key : key[s[i].toString()], check : true});
+            service_сolour[s[i].toString()] = c[i % 4].toString();
         }
-    }*/
-    /*function onGetcode(name,address,lat,lon){
-        var s =  name + "\r\n" + address + "\r\n" + lat + "\r\n" + lon
-        if(name !== "No result"){
-            marker_list.append({lat : lat, lon: lon, line : s, сolour: service_сolour[name.toString()]});
-        }
-        //mapview.zoomLevel--;
-        //mapview.fitViewportToVisibleMapItems();
-        process_indicator.value += (1 / (number_requests));
-    }*/
-
+        //console.log("service" + service_marker_сolour.count);
+    }
 }

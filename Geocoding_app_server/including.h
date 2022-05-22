@@ -22,6 +22,8 @@
 
 struct coordinate{
   QString address;
+  double lat;
+  double lon;
   QGeoLocation location;
 };
 

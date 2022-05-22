@@ -5,9 +5,20 @@ QString Service_MapBox::get_service_name()
   return "MapBox";
 }
 
-QUrl Service_MapBox::request(const QString* q)
+QUrl Service_MapBox::direct_request(const QString &q)
 {
-  QUrl url("https://api.mapbox.com/geocoding/v5/mapbox.places/" + *q + ".json");
+  QUrl url("https://api.mapbox.com/geocoding/v5/mapbox.places/" + q + ".json");
+  QUrlQuery query;
+  query.clear();
+  query.addQueryItem("access_token", API_key);
+  query.addQueryItem("limit","1");
+  url.setQuery(query.query());
+  return url;
+}
+
+QUrl Service_MapBox::reverse_request(const double &lat, const double &lon)
+{
+  QUrl url("https://api.mapbox.com/geocoding/v5/mapbox.places/" + (QString::number(lon) + "," + QString::number(lat)) + ".json");
   QUrlQuery query;
   query.clear();
   query.addQueryItem("access_token", API_key);

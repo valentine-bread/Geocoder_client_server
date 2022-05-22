@@ -30,7 +30,8 @@ public:
   QString Geocode();
   Q_INVOKABLE void setGeocode(QString);
   //Q_INVOKABLE void geocoding(const QString);
-  Q_INVOKABLE void geocoding_list(const QVariantMap&);
+  Q_INVOKABLE void direct_geocoding_list(const QVariantMap&);
+  Q_INVOKABLE void reverse_geocoding_list(const QVariantMap&);
   //Q_INVOKABLE void geocoding_test();
   Q_INVOKABLE QVariantList load_in_file(const QString);
   Q_INVOKABLE void get_rez(const QUrl&);

@@ -38,7 +38,9 @@ void MyTcpServer::onReadyRead()
           qDebug() << "Unknown data type.";
         case geocoding_address_list:
           {
-            geocoder->geocoding_list(doc.object().value("service_check").toObject().toVariantMap(),doc.object().value("address_list").toArray().toVariantList());
+            geocoder->geocoding_list(doc.object().value("service_check").toObject().toVariantMap(),
+                                     doc.object().value("address_list").toArray().toVariantList(),
+                                     doc.object().value("geocoding_type").toString());
             tmp_socket->waitForBytesWritten(500);
             break;
           }
@@ -51,10 +53,12 @@ void MyTcpServer::onReadyRead()
             tmp_socket->write(QJsonDocument(obj_rez).toJson());
             tmp_socket->waitForBytesWritten(500);
             qDebug() << obj_rez;
+            break;
           }
         case set_service_key:
           {
             geocoder->download_API_key(doc.object().value("service_key").toObject().toVariantMap());
+            break;
           }
         }
     }
@@ -70,6 +74,7 @@ void MyTcpServer::onDisconnected()
   qDebug() << "Disconnected client.";
   tmp_socket->close();
   tmp_socket->deleteLater();
+  tmp_socket->parent()->deleteLater();
 }
 
 void MyTcpServer::onfinish_geocoding_all(QJsonDocument &rez)

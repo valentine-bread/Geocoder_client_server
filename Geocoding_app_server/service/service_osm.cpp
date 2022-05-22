@@ -1,12 +1,24 @@
 #include "service_osm.h"
 
-QUrl Service_OSM::request(const QString *q)
+QUrl Service_OSM::direct_request(const QString &q)
 {
   QUrl url("https://nominatim.openstreetmap.org/search");
   QUrlQuery query;
   query.addQueryItem("format","geocodejson");
   query.addQueryItem("limit","1");
-  query.addQueryItem("q",*q);
+  query.addQueryItem("q",q);
+  url.setQuery(query.query());
+  return url;
+}
+
+QUrl Service_OSM::reverse_request(const double &lat, const double &lon)
+{
+  QUrl url("https://nominatim.openstreetmap.org/reverse");
+  QUrlQuery query;
+  query.addQueryItem("lat",QString::number(lat));
+  query.addQueryItem("lon",QString::number(lon));
+  query.addQueryItem("format","geocodejson");
+  query.addQueryItem("limit","1");
   url.setQuery(query.query());
   return url;
 }

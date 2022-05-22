@@ -32,30 +32,18 @@ MenuBar{
     Menu{
         title: "Старт"
         Action{
-            text: "GO"
+            text: "Прямое геокодирование"
             onTriggered:{
-                console.log('GO')
-                marker_list.clear();
-                process_indicator.value = 0;
-                number_requests = 0;
-                var map_address = [];
-                for(var i = 0; i !== address_listModel.count; i++){
-                    map_address.push(address_listModel.get(i).address);
-                }
-                var map_chack = {};
-                for(i = 0; i !== service_marker_сolour.count; i++){
-                    map_chack[service_marker_сolour.get(i).service] = service_marker_сolour.get(i).check;
-                    if(service_marker_сolour.get(i).check === true){
-                        number_requests += address_listModel.count;
-                    }
-                }
-                Geocode.set_address_list(map_address);
-                Geocode.geocoding_list(map_chack);
-                //Geocode.geocoding_test();
-
-
+                start_geocoding("direct");
             }
         }
+        Action{
+            text: "Обратное геокодирование"
+            onTriggered:{
+                start_geocoding("reverse");
+               }
+        }
+
         Action{
             text: "Выбор сервисов"
             onTriggered:{
@@ -100,4 +88,33 @@ MenuBar{
             open();
         }
     }
+    function start_geocoding(type){
+        console.log('GO')
+        marker_list.clear();
+        process_indicator.value = 0;
+        number_requests = 0;
+        var map_address = [];
+        for(var i = 0; i !== address_listModel.count; i++){
+            map_address.push(address_listModel.get(i).address);
+        }
+        var map_chack = {};
+        for(i = 0; i !== service_marker_сolour.count; i++){
+            map_chack[service_marker_сolour.get(i).service] = service_marker_сolour.get(i).check;
+            if(service_marker_сolour.get(i).check === true){
+                number_requests += address_listModel.count;
+            }
+        }
+        Geocode.set_address_list(map_address);
+        if(type ==="direct"){
+            Geocode.direct_geocoding_list(map_chack);
+        }
+        else if(type === "reverse"){
+            Geocode.reverse_geocoding_list(map_chack);
+        }
+
+        //Geocode.geocoding_test();
+
+    }
 }
+
+
