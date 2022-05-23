@@ -28,6 +28,12 @@ MenuBar{
                 //Geocode.get_rez()
             }
         }
+        Action{
+            text: "Загрузить ключи"
+            onTriggered:{
+                fileDialog_data.load_key();
+            }
+        }
     }
     Menu{
         title: "Старт"
@@ -50,12 +56,13 @@ MenuBar{
                 //on_Completed();
                 select_service_window.show();
             }
-        }
+        }        
     }
     FileDialog {
         id: fileDialog_data
         signal load()
         signal save()
+        signal load_key()
         property int type: 0
 
         title: "Please choose a file"
@@ -63,20 +70,23 @@ MenuBar{
         onAccepted: {
             if(type == 0){
                 console.log("You chose: " + fileDialog_data.fileUrl);
-                var l = Geocode.load_in_file((fileDialog_data.fileUrl.toString()));
+                var l = Geocode.load_out_file((fileDialog_data.fileUrl.toString()));
                 address_listModel.clear();
                 for(var i = 0; i !== l.length; i++){
                     address_listModel.append({address: l[i] + ""});
                 }
             }
             else if(type == 1){
-                Geocode.get_rez((fileDialog_data.fileUrl.toString()));
+                Geocode.save_in_file((fileDialog_data.fileUrl.toString()));
+            }
+            else if(type == 2){
+                Geocode.load_key_out_file((fileDialog_data.fileUrl.toString()));
             }
         }
         onRejected: {
             console.log("Canceled")
         }
-        nameFilters: [ "Text (*.txt)", "All files (*)" ]
+        nameFilters: [ "Text (*.txt)", "JSON (*.json)", "All files (*)" ]
         onLoad:{
             type = 0;
             selectExisting = true
@@ -87,12 +97,15 @@ MenuBar{
             selectExisting = false
             open();
         }
+        onLoad_key: {
+            type = 2;
+            selectExisting = true
+            open();
+        }
     }
     function start_geocoding(type){
         console.log('GO')
         marker_list.clear();
-        process_indicator.value = 0;
-        number_requests = 0;
         var map_address = [];
         for(var i = 0; i !== address_listModel.count; i++){
             map_address.push(address_listModel.get(i).address);
@@ -100,9 +113,6 @@ MenuBar{
         var map_chack = {};
         for(i = 0; i !== service_marker_сolour.count; i++){
             map_chack[service_marker_сolour.get(i).service] = service_marker_сolour.get(i).check;
-            if(service_marker_сolour.get(i).check === true){
-                number_requests += address_listModel.count;
-            }
         }
         Geocode.set_address_list(map_address);
         if(type ==="direct"){
@@ -111,10 +121,9 @@ MenuBar{
         else if(type === "reverse"){
             Geocode.reverse_geocoding_list(map_chack);
         }
+        loading_animation.visible = true;
 
         //Geocode.geocoding_test();
 
     }
 }
-
-

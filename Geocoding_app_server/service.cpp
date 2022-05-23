@@ -14,6 +14,11 @@ Service::~Service()
   delete rez_data;
 }
 
+QGeoLocation Service::reverse_reply(const QJsonDocument *doc)
+{
+  return reply(doc);
+}
+
 void Service::geocoding_list(const QVariantList& q, const QString& type)
 {
   timer = QTime::currentTime();
@@ -48,7 +53,7 @@ void Service::direct_geocoding()
 
 void Service::reverse_geocoding()
 {
-  qDebug() << reverse_request(counter->lat,counter->lon);
+  //qDebug() << reverse_request(counter->lat,counter->lon);
 
   QNetworkRequest _request(reverse_request(counter->lat,counter->lon));
   _request.setRawHeader("Accept-Language", "ru");
@@ -60,9 +65,11 @@ void Service::slot_manager(QNetworkReply *rez)
   if(rez->error() == QNetworkReply::NoError){
       QJsonParseError docErr;
       QJsonDocument doc = QJsonDocument::fromJson(rez->readAll(),&docErr);
-      qDebug() << doc;
+      //qDebug() << doc;
       if (docErr.error == QJsonParseError::NoError){
-          QGeoLocation code = reply(&doc);
+          QGeoLocation code;
+          if (type_geocoding)  code = reverse_reply(&doc);
+          else code = reply(&doc);
           counter->location = code;
           //qDebug() << get_service_name() << " " <<  code.lat << " " << code.lon;
         }

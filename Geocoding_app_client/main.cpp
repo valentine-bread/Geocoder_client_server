@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
       QCoreApplication::exit(-1);
   }, Qt::QueuedConnection);
 
-  My_Geocode code;
+  MyCore code;
   //code.load_API_key();
   context->setContextProperty("Geocode", &code);
 

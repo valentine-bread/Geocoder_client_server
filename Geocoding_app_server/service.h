@@ -12,6 +12,7 @@ public:
   virtual QUrl direct_request(const QString& q) = 0;
   virtual QUrl reverse_request(const double& lat, const double& lon) = 0;
   virtual QGeoLocation reply(const QJsonDocument* doc) = 0;
+  virtual QGeoLocation reverse_reply(const QJsonDocument* doc);
   virtual QString get_service_name() = 0;
   const int get_time();
   void direct_geocoding();

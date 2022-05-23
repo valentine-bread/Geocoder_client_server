@@ -7,12 +7,13 @@ import QtLocation 5.15
 import QtQuick.Dialogs 1.3
 import Qt.labs.qmlmodels 1.0
 import QtQuick.Controls.Universal 2.12
+import QtGraphicalEffects 1.0
+
 
 ApplicationWindow  {    
     width: 1024
     height: 512
     visible: true
-    property int number_requests : 0
     property var service_сolour: []    
     ListModel{
         id:service_marker_сolour
@@ -50,15 +51,14 @@ ApplicationWindow  {
             }
         }
 
-        ProgressBar{
-            id: process_indicator
-            anchors.bottom: mapview.bottom
-            anchors.left: mapview.left
-            width: mapview.width
-            //height : 100
-            value: 0
 
+        MyLoading_animation {
+            id: loading_animation
+            anchors.horizontalCenter: mapview.horizontalCenter
+            anchors.verticalCenter: mapview.verticalCenter
+            visible: false
         }
+
 
         Rectangle {
             id:table_address
@@ -107,6 +107,12 @@ ApplicationWindow  {
         onGetcode:{
             onGetcode(name,address);
         }
+        onFinish_download_key: {
+            on_Completed();
+        }
+        onFinish_all_geocoding:{
+            loading_animation.visible = false;
+        }
     }
 
     function onGetcode(name,address){
@@ -116,17 +122,8 @@ ApplicationWindow  {
             if(tmp.address !== "No result"){
                 marker_list.append({lat : tmp.lat, lon: tmp.lon, line : s, сolour: service_сolour[name.toString()]});
             }
-            process_indicator.value += (1 / (number_requests));
         }
         mapview.fitViewportToVisibleMapItems();
-    }
-
-
-    Connections {
-        target: Geocode
-        onFinish_download_key: {
-            on_Completed();
-        }
     }
 
     function on_Completed(){

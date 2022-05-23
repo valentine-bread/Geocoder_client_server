@@ -8,5 +8,6 @@
         <file>MyLegend.qml</file>
         <file>MySelect_service_window.qml</file>
         <file>MyTexyInput.qml</file>
+        <file>MyLoading_animation.qml</file>
     </qresource>
 </RCC>

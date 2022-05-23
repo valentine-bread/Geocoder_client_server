@@ -52,7 +52,6 @@ void MyTcpServer::onReadyRead()
             obj_rez.insert("service_API_key", QJsonObject::fromVariantMap(geocoder->get_all_API_key()));
             tmp_socket->write(QJsonDocument(obj_rez).toJson());
             tmp_socket->waitForBytesWritten(500);
-            qDebug() << obj_rez;
             break;
           }
         case set_service_key:
@@ -73,7 +72,7 @@ void MyTcpServer::onDisconnected()
   QTcpSocket* tmp_socket = qobject_cast<QTcpSocket*>(sender()); //получение указателя на сокет
   qDebug() << "Disconnected client.";
   tmp_socket->close();
-  tmp_socket->deleteLater();
+  //tmp_socket->deleteLater();
   tmp_socket->parent()->deleteLater();
 }
 
@@ -84,7 +83,8 @@ void MyTcpServer::onfinish_geocoding_all(QJsonDocument &rez)
   obj.insert("type",geocoding_address_list);
   rez.setObject(obj);
   QByteArray itog(rez.toJson());
-  tmp_socket->write("{\"type\":" + QByteArray::number(size) + ",\"data\":\""+ QByteArray::number(itog.size()) + "}" +"\"}}"); //отправка размера сообщения
+  //qDebug() << ("{\"type\":" + QByteArray::number(size) + ",\"size\":"+ QByteArray::number(itog.size()) + "}");
+  tmp_socket->write("{\"type\":" + QByteArray::number(size) + ",\"size\":"+ QByteArray::number(itog.size()) + "}"); //отправка размера сообщения
   tmp_socket->waitForBytesWritten(500);
   tmp_socket->write(itog);  //отправка тела сообщения
   qDebug() << "Write message client " << tmp_socket->socketDescriptor();

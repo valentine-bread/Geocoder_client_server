@@ -80,7 +80,6 @@ void My_Geocode::onfinish_geocoding_list(Service* s)
 {
   qDebug() << s->get_service_name() << " " << s->get_time() << "ms";
   finish_flag--;
-  qDebug() << finish_flag;
   if(finish_flag == 0){
       QJsonObject rez_obj;
       for(auto &it : service_list){
@@ -117,5 +116,3 @@ void My_Geocode::geocoding_list(const QVariantMap &check_map, const QVariantList
         }
     }
 }
-
-

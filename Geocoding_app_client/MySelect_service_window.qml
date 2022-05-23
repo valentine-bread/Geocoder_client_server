@@ -40,27 +40,6 @@ Window {
 
                 verticalAlignment: TextInput.AlignTop
             }
-            /*Rectangle{
-                anchors.left: service_name.right
-                anchors.right: parent.right
-                height: 40
-                border.color: "black"
-                border.width: 1
-                clip: true
-                TextInput{
-                    anchors.fill: parent
-                    id: key_input
-                    font.pointSize: 12
-                    text: key
-                    anchors.margins: 4
-                    horizontalAlignment: Text.AlignLeft
-                    verticalAlignment: TextInput.AlignTop
-                    selectByMouse: true
-                    onEditingFinished: {
-                        service_marker_сolour.set(index, {key : text})
-                    }
-                }
-            }*/
             MyTexyInput{
                 anchors.left: service_name.right
                 anchors.right: parent.right
@@ -91,9 +70,4 @@ Window {
             Geocode.load_API_key(key_map);
         }
     }
-    /*onClosingChanged: {
-        console.log("closing");
-        on_Completed();
-        select_service_window.close();
-    }*/
 }
