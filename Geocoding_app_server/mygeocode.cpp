@@ -3,16 +3,14 @@
 My_Geocode::My_Geocode(QObject *parent)
   : QObject{parent}
 {
-  service_list.push_back(new Service_OSM);
+  service_list.push_back(new Service_OSM);//Добавление сервиса OSM
   service_list.push_back(new Service_MapBox);
   service_list.push_back(new Service_Ya);
 
-  for(auto &it : service_list){
+  for(auto &it : service_list){ //Обрадение к списку сервисов
       connect(it,SIGNAL(finish_geocoding_list(Service*)),this,SLOT(onfinish_geocoding_list(Service*)));
-      //qDebug() << it->get_service_name();
     }
   socket = new QTcpSocket(this);
-  //address_mas = new QVariantList();
   qDebug() << "Ok";
 }
 
@@ -100,6 +98,7 @@ void My_Geocode::onfinish_geocoding_list(Service* s)
           rez_obj.insert(it->get_service_name(), arr);
         }
       qDebug() << "finish geocoding" << rez_obj;
+      rez_obj.insert("type",1);
       QJsonDocument doc(rez_obj);
       emit finish_geocoding_all(doc);
     }

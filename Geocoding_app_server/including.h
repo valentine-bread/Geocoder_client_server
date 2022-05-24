@@ -1,6 +1,7 @@
 #ifndef INCLUDING_H
 #define INCLUDING_H
 
+#include <QCoreApplication>
 #include <QObject>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -19,6 +20,8 @@
 #include <QGeoAddress>
 #include <QGeoLocation>
 #include <QGeoCoordinate>
+#include <QNetworkDiskCache>
+#include <QDir>
 
 struct coordinate{
   QString address;

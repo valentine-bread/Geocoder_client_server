@@ -24,6 +24,7 @@ public:
   QString get_API_key();
 
 
+
 signals:
   //void getcode(QString name, double lat, double lon);
   void finish_geocoding_list(Service*);
@@ -33,10 +34,12 @@ protected slots:
 
 protected:
   QNetworkAccessManager* manager;
+  QNetworkRequest* _request;
   QList<coordinate>* rez_data;
   QList<coordinate>::iterator counter;
   QTime timer;
   QString API_key;
+  QNetworkDiskCache* diskCache;
   int time_execution;
   bool type_geocoding;
 };

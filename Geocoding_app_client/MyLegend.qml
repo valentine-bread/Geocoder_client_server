@@ -31,37 +31,4 @@ Rectangle {
             }
         }
     }
-
-    /*Grid {
-        columns: 2
-        spacing: 4
-        anchors.fill: parent
-        Image {
-            source: "http://maps.gstatic.com/mapfiles/ridefinder-images/mm_20_" + ".png"
-        }
-        Text {
-            text: qsTr("Open street map")
-            font.pointSize: 10
-            color: "white"
-            verticalAlignment: Text.AlignTop
-        }
-        Image {
-            source: "http://maps.gstatic.com/mapfiles/ridefinder-images/mm_20_" + ".png"
-        }
-        Text {
-            text: qsTr("MapBox")
-            font.pointSize: 10
-            color: "white"
-            verticalAlignment: Text.AlignTop
-        }
-        Image {
-            source: "http://maps.gstatic.com/mapfiles/ridefinder-images/mm_20_" + ".png"
-        }
-        Text {
-            text: qsTr("Yandex")
-            color: "white"
-            font.pointSize: 10
-            verticalAlignment: Text.AlignTop
-        }
-    }*/
 }

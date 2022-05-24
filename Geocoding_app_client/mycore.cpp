@@ -217,8 +217,10 @@ void MyCore::onReadyRead(){
           }
         }
     }
-  else
+  else{
     qDebug() << "Formt error." + docError.errorString();
+    emit finish_all_geocoding();
+    }
 }
 
 void MyCore::connection()

@@ -23,6 +23,7 @@ Window {
             Switch{
                 id: checkbox
                 anchors.left: parent.left
+                anchors.margins: 5
                 width: 40
                 height: 40
                 checked: check

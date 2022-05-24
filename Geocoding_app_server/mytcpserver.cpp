@@ -12,8 +12,8 @@ MyTcpServer::MyTcpServer(QObject *parent):QTcpServer(parent)
 void MyTcpServer::incomingConnection(qintptr socketDescriptor)
 {
   geocoder_mas.push_back(new My_Geocode());//добавление нового кодера
-  QTcpSocket* tmp_socket = geocoder_mas.last()->socket;
   My_Geocode* geocoder = geocoder_mas.last();
+  QTcpSocket* tmp_socket = geocoder->socket;
   geocoder->load_API_key();
   connect(geocoder,SIGNAL(finish_geocoding_all(QJsonDocument&)),this,SLOT(onfinish_geocoding_all(QJsonDocument&)),Qt::DirectConnection);
   tmp_socket->setSocketDescriptor(socketDescriptor);
@@ -29,8 +29,7 @@ void MyTcpServer::onReadyRead()
   QJsonParseError docError;
   QJsonDocument doc = QJsonDocument::fromJson(tmp_socket->readAll(),&docError);
   qDebug() << doc;
-  if(docError.errorString() == "no error occurred")
-    {
+  if(docError.error == QJsonParseError::NoError){
       //QByteArray itog;
       switch (doc.object().value("type").toInt())   //определения типа сообщения
         {
@@ -79,11 +78,11 @@ void MyTcpServer::onDisconnected()
 void MyTcpServer::onfinish_geocoding_all(QJsonDocument &rez)
 {
   QTcpSocket* tmp_socket =  qobject_cast<My_Geocode*>(sender())->socket;
-  QJsonObject obj = rez.object();
+  /*QJsonObject obj = rez.object();
   obj.insert("type",geocoding_address_list);
   rez.setObject(obj);
+  qDebug() << obj;*/
   QByteArray itog(rez.toJson());
-  //qDebug() << ("{\"type\":" + QByteArray::number(size) + ",\"size\":"+ QByteArray::number(itog.size()) + "}");
   tmp_socket->write("{\"type\":" + QByteArray::number(size) + ",\"size\":"+ QByteArray::number(itog.size()) + "}"); //отправка размера сообщения
   tmp_socket->waitForBytesWritten(500);
   tmp_socket->write(itog);  //отправка тела сообщения

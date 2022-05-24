@@ -14,13 +14,8 @@ public:
 
 private:
   void incomingConnection(qintptr handle);
-  //My_Geocode *geocoder;
   QVector<My_Geocode*> geocoder_mas;
-  /*QJsonDocument doc;
-  QJsonParseError docError;
-  QByteArray data;*/
-  int counter = 0;
-  //QByteArray query_to_byte_array(QSqlQuery*);
+  //int counter = 0;
 
 public slots:
   void onReadyRead();

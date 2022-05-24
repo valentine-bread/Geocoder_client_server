@@ -14,24 +14,6 @@ Row {
     anchors.left: parent.left
     anchors.right: parent.right
 
-   /*Rectangle{
-        id:rect_address
-        width: (parent.width - 100)
-        height: 30
-        //anchors.left: parent.left
-        border.color: "black"
-        border.width: 1
-        clip: true
-        TextInput{
-            id:address_text
-            anchors.fill: parent
-            font.pointSize: 12
-            text: "Moscow"
-            anchors.margins: 4
-            selectByMouse: true
-            verticalAlignment: TextInput.AlignTop
-        }
-    }*/
     MyTexyInput {
         id: address_text
         width: (parent.width - 100)

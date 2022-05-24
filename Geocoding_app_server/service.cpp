@@ -4,14 +4,22 @@ Service::Service(QObject *parent)
   : QObject{parent}
 {
   manager = new QNetworkAccessManager(this);
+  diskCache = new QNetworkDiskCache(this);
+  diskCache->setCacheDirectory( QCoreApplication::applicationDirPath() + QString("\\cache") );
+  manager->setCache(diskCache);
   connect(manager,SIGNAL(finished(QNetworkReply*)),this,SLOT(slot_manager(QNetworkReply*)));
   rez_data = new QList<coordinate>();
+  _request = new QNetworkRequest();
+  _request->setRawHeader("Accept-Language", "ru");
+  _request->setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::PreferCache);
 }
 
 Service::~Service()
 {
   delete manager;
+  delete diskCache;
   delete rez_data;
+  delete _request;
 }
 
 QGeoLocation Service::reverse_reply(const QJsonDocument *doc)
@@ -46,22 +54,20 @@ void Service::geocoding_list(const QVariantList& q, const QString& type)
 
 void Service::direct_geocoding()
 {  
-  QNetworkRequest _request(direct_request(counter->address));
-  _request.setRawHeader("Accept-Language", "ru");
-  manager->get(_request);
+  _request->setUrl(direct_request(counter->address));
+  manager->get(*_request);
 }
 
 void Service::reverse_geocoding()
 {
-  //qDebug() << reverse_request(counter->lat,counter->lon);
-
-  QNetworkRequest _request(reverse_request(counter->lat,counter->lon));
-  _request.setRawHeader("Accept-Language", "ru");
-  manager->get(_request);
+  _request->setUrl(reverse_request(counter->lat,counter->lon));
+  manager->get(*_request);
 }
 
 void Service::slot_manager(QNetworkReply *rez)
 {
+  QVariant fromCache = rez->attribute(QNetworkRequest::SourceIsFromCacheAttribute);
+  qDebug() << "page from cache?" << fromCache.toBool();
   if(rez->error() == QNetworkReply::NoError){
       QJsonParseError docErr;
       QJsonDocument doc = QJsonDocument::fromJson(rez->readAll(),&docErr);
@@ -71,6 +77,7 @@ void Service::slot_manager(QNetworkReply *rez)
           if (type_geocoding)  code = reverse_reply(&doc);
           else code = reply(&doc);
           counter->location = code;
+          qDebug() << counter->address << " cache?" << fromCache.toBool() ;
           //qDebug() << get_service_name() << " " <<  code.lat << " " << code.lon;
         }
       else
