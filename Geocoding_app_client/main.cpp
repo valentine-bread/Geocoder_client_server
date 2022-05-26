@@ -3,6 +3,7 @@
 #include "mycore.h"
 #include <QQmlContext>
 #include <QQuickStyle>
+#include <QIcon>
 
 int main(int argc, char *argv[])
 {
@@ -19,12 +20,9 @@ int main(int argc, char *argv[])
     if (!obj && url == objUrl)
       QCoreApplication::exit(-1);
   }, Qt::QueuedConnection);
-
+  app.setWindowIcon(QIcon("://icon_win.png"));
   MyCore code;
-  //code.load_API_key();
   context->setContextProperty("Geocode", &code);
-
   engine.load(url);
-
   return app.exec();
 }

@@ -14,6 +14,7 @@ ApplicationWindow  {
     width: 1024
     height: 512
     visible: true
+    title: qsTr("Геокодирование")
     property var service_сolour: []    
     ListModel{
         id:service_marker_сolour
@@ -24,32 +25,31 @@ ApplicationWindow  {
 
     Rectangle{
         anchors.fill: parent
-        Map{
-            id:mapview
-            center: QtPositioning.coordinate(55.7558, 37.6178);
-            plugin: Plugin { name: "osm" }//"osm", "mapboxgl", "esri"
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.bottom: parent.bottom
-            anchors.right: table_address.left
-            copyrightsVisible: false
-            MapItemGroup
-            {
-                MapItemView{
-                    model: ListModel{
-                        id: marker_list
-                        onCountChanged: {
-                            mapview.fitViewportToVisibleMapItems();
-                            //mapview.zoomLevel;
-                        }
-                    }
-
-                    delegate: MyGeoMarcker{
-                        id: geomarker
-                    }
+Map{
+    id:mapview      //название объекта по которому к нему можно обратится
+    center: QtPositioning.coordinate(55.7558, 37.6178); //начальный центр карты
+    plugin: Plugin { name: "osm" } //плагин дял работы с карт. сервисом
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    anchors.right: table_address.left
+    copyrightsVisible: false
+    MapItemGroup    //группа объектов  на карте
+    {
+        MapItemView{    //представление списка объектов
+            model: ListModel{      //список объектов на крте
+                id: marker_list
+                onCountChanged: {
+                    mapview.fitViewportToVisibleMapItems(); //центровка карты
                 }
             }
+
+            delegate: MyGeoMarcker{ //маркер создаваемый из списка объектов
+                id: geomarker
+            }
         }
+    }
+}
 
 
         MyLoading_animation {
@@ -57,6 +57,12 @@ ApplicationWindow  {
             anchors.horizontalCenter: mapview.horizontalCenter
             anchors.verticalCenter: mapview.verticalCenter
             visible: false
+        }
+
+        MyError_animation {
+            id: error_animation
+            anchors.bottom: mapview.bottom;
+            anchors.horizontalCenter: mapview.horizontalCenter
         }
 
 
@@ -113,7 +119,18 @@ ApplicationWindow  {
         onFinish_all_geocoding:{
             loading_animation.visible = false;
         }
+        onShow_error_message:{
+            show_error_massage(what);
+        }
     }
+
+    function show_error_massage(what) {
+        //console.log(what);
+        error_animation.what = (what);
+        error_animation.visible= true;
+    }
+
+
 
     function onGetcode(name,address){
         for(var i = 0; i !== address.length; i++){

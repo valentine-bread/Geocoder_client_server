@@ -33,7 +33,7 @@ public:
   Q_INVOKABLE void direct_geocoding_list(const QVariantMap&);
   Q_INVOKABLE void reverse_geocoding_list(const QVariantMap&);
   //Q_INVOKABLE void geocoding_test();
-  Q_INVOKABLE QVariantList load_out_file(const QString);
+  Q_INVOKABLE QVariantList load_out_file(const QUrl &path);
   Q_INVOKABLE void save_in_file(const QUrl&);
   Q_INVOKABLE void set_address_list(QVariantList);
   Q_INVOKABLE const QVariantList get_all_service_name();
@@ -41,6 +41,7 @@ public:
   Q_INVOKABLE void load_API_key(const QVariantMap&);
   Q_INVOKABLE void load_key_out_file(const QUrl&);
   Q_INVOKABLE void download_API_key();
+  Q_INVOKABLE void set_ip_address_server(QString address);
 
 private:
   QTcpSocket* socket;
@@ -51,6 +52,7 @@ private:
   QVariantList* address_mas;
   QMap<QString, QVariantList>* result;
   QByteArray data;
+  QString ip_address_server = "127.0.0.0";
   int message_size = 0;
   bool completed = true;
 
@@ -66,6 +68,7 @@ signals:
   void getcode(QString name,QVariantList address);
   void finish_all_geocoding();
   void finish_download_key();
+  void show_error_message(QString what);
 
 };
 

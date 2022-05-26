@@ -32,11 +32,10 @@ QString MyCore::Geocode(){
 
 void MyCore::setGeocode(QString){}
 
-QVariantList MyCore::load_out_file(QString path)
+QVariantList MyCore::load_out_file(const QUrl &path)
 {
   if (path.isEmpty()) return *address_mas;
-  path.remove(0,8);
-  QFile f(path);
+  QFile f(path.fileName());
   if(!f.open(QFile::ReadOnly | QIODevice::Text)) return *address_mas;
   address_mas->clear();
   while(!f.atEnd()){
@@ -72,7 +71,7 @@ void MyCore::save_in_file(const QUrl &path)
       auto rez = result->value(it.toString());
       for(auto &x : rez){
           QJsonObject obj = x.toJsonObject();
-          writeStream << obj.value("address").toString() << " " << obj.value("lat").toString() << " " << obj.value("lon").toString() << "\n";
+          writeStream << obj.value("address").toString() << "\t " << obj.value("lat").toDouble() << "\t " << obj.value("lon").toDouble() << "\n";
         }
       writeStream  << "\n";
     }
@@ -122,6 +121,11 @@ void MyCore::download_API_key()
   socket->write("{\"type\":" + QByteArray::number(get_service_key) + "}");
 }
 
+void MyCore::set_ip_address_server(QString address)
+{
+  ip_address_server = address;
+}
+
 void MyCore::direct_geocoding_list(const QVariantMap &check_map)
 {  
   QJsonObject obj_rez;
@@ -140,11 +144,13 @@ void MyCore::reverse_geocoding_list(const QVariantMap &check_map)
       QRegExp rx(".*(\\d+\\.\\d+).*(\\d+\\.\\d+).*");
       rx.indexIn(x.toString());
       QJsonObject obj;
-      if(!rx.cap(1).isEmpty() && !rx.cap(2).isEmpty()){
-        obj.insert("lat",rx.cap(1).toDouble());
-        obj.insert("lon",rx.cap(2).toDouble());
-        arr.push_back(obj);
+      if(rx.cap(1).isEmpty() || rx.cap(2).isEmpty()){
+          emit show_error_message("Неверныее данные.");
+          return;
         }
+      obj.insert("lat",rx.cap(1).toDouble());
+      obj.insert("lon",rx.cap(2).toDouble());
+      arr.push_back(obj);
       //qDebug() << rx.cap(1).toDouble() << " " << rx.cap(2).toDouble();
     }
   QJsonObject obj_rez;
@@ -152,16 +158,16 @@ void MyCore::reverse_geocoding_list(const QVariantMap &check_map)
   obj_rez.insert("geocoding_type", "reverse");
   obj_rez.insert("service_check",QJsonObject::fromVariantMap(check_map));
   obj_rez.insert("address_list",arr);
+   qDebug() << obj_rez;
   socket->write(QJsonDocument(obj_rez).toJson());
 }
 
 void MyCore::onReadyRead(){
   data = socket->readAll();
-  while(completed == false) //проверка полноты полученного сообщения
-    {
+  for(int i = 0;completed == false && i < 100; i++ ){ //проверка полноты полученного сообщения
       if(message_size != data.size()){
           data += socket->readAll();
-          socket->waitForReadyRead(50);
+          socket->waitForReadyRead(500);
         }
       else{
           completed = true;
@@ -232,7 +238,8 @@ void MyCore::connection()
       timer->stop();
       download_API_key();
     }
-  //else
+  else
+    emit show_error_message("Not connect server.");
     //qDebug("Not connect server.");
 }
 

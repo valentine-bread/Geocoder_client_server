@@ -11,6 +11,7 @@ Window {
     id: select_service_window
     width:800
     height:320
+    title: qsTr("Выбор сервисов")
     //property bool closing: false
     ListView{
         id: listview_key_check        
@@ -38,14 +39,13 @@ Window {
                 width: 150
                 text: " " + service.toString()
                 font.pointSize: 12
-
-                verticalAlignment: TextInput.AlignTop
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
             }
             MyTexyInput{
                 anchors.left: service_name.right
                 anchors.right: parent.right
                 height: 40
-
                 id: key_input
                 text_in: key
                 onFinish_edit: {
@@ -61,7 +61,7 @@ Window {
         anchors.right: parent.right
         height: 40
         text: "Сохранить"
-        width: 80
+        width: 100
         onClicked: {
             var key_map = {};
             for(var i = 0; i !== service_marker_сolour.count; i++){

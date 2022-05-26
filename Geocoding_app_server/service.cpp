@@ -17,7 +17,6 @@ Service::Service(QObject *parent)
 Service::~Service()
 {
   delete manager;
-  delete diskCache;
   delete rez_data;
   delete _request;
 }

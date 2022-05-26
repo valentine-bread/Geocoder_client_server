@@ -11,7 +11,7 @@ My_Geocode::My_Geocode(QObject *parent)
       connect(it,SIGNAL(finish_geocoding_list(Service*)),this,SLOT(onfinish_geocoding_list(Service*)));
     }
   socket = new QTcpSocket(this);
-  qDebug() << "Ok";
+  qDebug() << "Start server.";
 }
 
 My_Geocode::~My_Geocode()
@@ -53,7 +53,7 @@ void My_Geocode::load_API_key()
     }
   for(auto &it : service_list){
       it->set_API_key(doc.object().value(it->get_service_name()).toString());
-      qDebug() << doc.object().value(it->get_service_name()).toString();
+      //qDebug() << doc.object().value(it->get_service_name()).toString();
     }
   f.close();
 }
@@ -65,7 +65,7 @@ void My_Geocode::download_API_key(const QVariantMap &key_map)
   QJsonObject obj;
   QJsonDocument doc;
   for(auto &it : service_list){
-      qDebug() <<  key_map.value(it->get_service_name()).toString();
+      //qDebug() <<  key_map.value(it->get_service_name()).toString();
       obj.insert(it->get_service_name(),key_map.value(it->get_service_name()).toString());
     }
   doc.setObject(obj);
@@ -97,8 +97,8 @@ void My_Geocode::onfinish_geocoding_list(Service* s)
             }
           rez_obj.insert(it->get_service_name(), arr);
         }
-      qDebug() << "finish geocoding" << rez_obj;
-      rez_obj.insert("type",1);
+      //qDebug() << "finish geocoding" << rez_obj;
+      //rez_obj.insert("type",1);
       QJsonDocument doc(rez_obj);
       emit finish_geocoding_all(doc);
     }

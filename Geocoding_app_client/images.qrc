@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>loading.png</file>
+        <file>icon_win.png</file>
     </qresource>
 </RCC>

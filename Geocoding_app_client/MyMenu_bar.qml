@@ -36,7 +36,7 @@ MenuBar{
         }
     }
     Menu{
-        title: "Старт"
+        title: "Геокодирование"
         Action{
             text: "Прямое геокодирование"
             onTriggered:{
@@ -70,7 +70,7 @@ MenuBar{
         onAccepted: {
             if(type == 0){
                 console.log("You chose: " + fileDialog_data.fileUrl);
-                var l = Geocode.load_out_file((fileDialog_data.fileUrl.toString()));
+                var l = Geocode.load_out_file((fileDialog_data.fileUrl));
                 address_listModel.clear();
                 for(var i = 0; i !== l.length; i++){
                     address_listModel.append({address: l[i] + ""});
