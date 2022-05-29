@@ -10,5 +10,6 @@
         <file>MyTexyInput.qml</file>
         <file>MyLoading_animation.qml</file>
         <file>MyError_animation.qml</file>
+        <file>MyInput_server_ip.qml</file>
     </qresource>
 </RCC>

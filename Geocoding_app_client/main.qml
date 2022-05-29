@@ -8,6 +8,7 @@ import QtQuick.Dialogs 1.3
 import Qt.labs.qmlmodels 1.0
 import QtQuick.Controls.Universal 2.12
 import QtGraphicalEffects 1.0
+import QtQuick.Layouts 1.0
 
 
 ApplicationWindow  {    
@@ -25,46 +26,31 @@ ApplicationWindow  {
 
     Rectangle{
         anchors.fill: parent
-Map{
-    id:mapview      //название объекта по которому к нему можно обратится
-    center: QtPositioning.coordinate(55.7558, 37.6178); //начальный центр карты
-    plugin: Plugin { name: "osm" } //плагин дял работы с карт. сервисом
-    anchors.top: parent.top
-    anchors.left: parent.left
-    anchors.bottom: parent.bottom
-    anchors.right: table_address.left
-    copyrightsVisible: false
-    MapItemGroup    //группа объектов  на карте
-    {
-        MapItemView{    //представление списка объектов
-            model: ListModel{      //список объектов на крте
-                id: marker_list
-                onCountChanged: {
-                    mapview.fitViewportToVisibleMapItems(); //центровка карты
+        Map{
+            id:mapview      //название объекта по которому к нему можно обратится
+            center: QtPositioning.coordinate(55.7558, 37.6178); //начальный центр карты
+            plugin: Plugin { name: "osm" } //плагин дял работы с карт. сервисом
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            anchors.right: table_address.left
+            copyrightsVisible: false
+            MapItemGroup    //группа объектов  на карте
+            {
+                MapItemView{    //представление списка объектов
+                    model: ListModel{      //список объектов на крте
+                        id: marker_list
+                        onCountChanged: {
+                            mapview.fitViewportToVisibleMapItems(); //центровка карты
+                        }
+                    }
+
+                    delegate: MyGeoMarcker{ //маркер создаваемый из списка объектов
+                        id: geomarker
+                    }
                 }
             }
-
-            delegate: MyGeoMarcker{ //маркер создаваемый из списка объектов
-                id: geomarker
-            }
         }
-    }
-}
-
-
-        MyLoading_animation {
-            id: loading_animation
-            anchors.horizontalCenter: mapview.horizontalCenter
-            anchors.verticalCenter: mapview.verticalCenter
-            visible: false
-        }
-
-        MyError_animation {
-            id: error_animation
-            anchors.bottom: mapview.bottom;
-            anchors.horizontalCenter: mapview.horizontalCenter
-        }
-
 
         Rectangle {
             id:table_address
@@ -90,23 +76,31 @@ Map{
                 }
             }
         }
-
         MyLegend {
             id: legend
         }
+
+        MyLoading_animation {
+            id: loading_animation
+            anchors.horizontalCenter: mapview.horizontalCenter
+            anchors.verticalCenter: mapview.verticalCenter
+            visible: false
+        }
+
+        MyError_animation {
+            id: error_animation
+            anchors.bottom: mapview.bottom;
+            anchors.horizontalCenter: mapview.horizontalCenter
+        }
     }
 
-
-
-    /*Component.onCompleted: {
-        on_Completed();
-    }*/
+    MyInput_server_ip {
+        id: input_server_ip
+    }
 
     MySelect_service_window {
         id: select_service_window
     }
-
-
 
     Connections{
         target: Geocode
@@ -129,8 +123,6 @@ Map{
         error_animation.what = (what);
         error_animation.visible= true;
     }
-
-
 
     function onGetcode(name,address){
         for(var i = 0; i !== address.length; i++){

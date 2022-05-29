@@ -42,6 +42,7 @@ public:
   Q_INVOKABLE void load_key_out_file(const QUrl&);
   Q_INVOKABLE void download_API_key();
   Q_INVOKABLE void set_ip_address_server(QString address);
+  Q_INVOKABLE const QString get_ip_address_server();
 
 private:
   QTcpSocket* socket;
@@ -52,7 +53,7 @@ private:
   QVariantList* address_mas;
   QMap<QString, QVariantList>* result;
   QByteArray data;
-  QString ip_address_server = "127.0.0.0";
+  QString ip_address_server = "127.0.0.1";
   int message_size = 0;
   bool completed = true;
 

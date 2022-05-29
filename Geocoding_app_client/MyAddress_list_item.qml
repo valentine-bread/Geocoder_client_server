@@ -9,8 +9,6 @@ import Qt.labs.qmlmodels 1.0
 
 Item {
     id: address_list_item
-    //anchors.left: parent.left
-    //anchors.right: parent.right
     width: parent.width
     height: 30
 

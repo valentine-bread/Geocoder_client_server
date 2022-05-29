@@ -58,6 +58,22 @@ MenuBar{
             }
         }        
     }
+    Menu{
+        title: "Сервер"
+        Action{
+            text: "IP сервера"
+            onTriggered:{
+                input_server_ip.show();
+            }
+        }
+        Action{
+            text: "API ключи"
+            onTriggered:{
+                input_server_ip.show();
+            }
+        }
+    }
+
     FileDialog {
         id: fileDialog_data
         signal load()

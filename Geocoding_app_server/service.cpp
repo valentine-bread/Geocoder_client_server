@@ -66,7 +66,6 @@ void Service::reverse_geocoding()
 void Service::slot_manager(QNetworkReply *rez)
 {
   QVariant fromCache = rez->attribute(QNetworkRequest::SourceIsFromCacheAttribute);
-  qDebug() << "page from cache?" << fromCache.toBool();
   if(rez->error() == QNetworkReply::NoError){
       QJsonParseError docErr;
       QJsonDocument doc = QJsonDocument::fromJson(rez->readAll(),&docErr);
@@ -76,7 +75,7 @@ void Service::slot_manager(QNetworkReply *rez)
           if (type_geocoding)  code = reverse_reply(&doc);
           else code = reply(&doc);
           counter->location = code;
-          qDebug() << counter->address << " cache?" << fromCache.toBool() ;
+          qDebug() << " cache?" << fromCache.toBool() ;
           //qDebug() << get_service_name() << " " <<  code.lat << " " << code.lon;
         }
       else

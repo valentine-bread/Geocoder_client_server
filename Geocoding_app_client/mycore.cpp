@@ -124,7 +124,17 @@ void MyCore::download_API_key()
 void MyCore::set_ip_address_server(QString address)
 {
   ip_address_server = address;
+  socket->disconnectFromHost();
+  connection();
+  qDebug() << address;
+
 }
+
+const QString MyCore::get_ip_address_server()
+{
+  return ip_address_server;
+}
+
 
 void MyCore::direct_geocoding_list(const QVariantMap &check_map)
 {  
@@ -231,7 +241,7 @@ void MyCore::onReadyRead(){
 
 void MyCore::connection()
 {
-  socket->connectToHost("127.0.0.1",27100);
+  socket->connectToHost(ip_address_server,27100);
   if(socket->waitForConnected(50))  //ожедание подключения
     {
       qDebug("Connect server.");
