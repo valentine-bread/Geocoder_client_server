@@ -1,6 +1,6 @@
 #include "service_osm.h"
 
-QUrl Service_OSM::direct_request(const QString &q)
+QUrl Service_OSM::direct_request(const QString &q)  //запрос прямого геокодирования
 {
   QUrl url("https://nominatim.openstreetmap.org/search");
   QUrlQuery query;
@@ -11,7 +11,7 @@ QUrl Service_OSM::direct_request(const QString &q)
   return url;
 }
 
-QUrl Service_OSM::reverse_request(const double &lat, const double &lon)
+QUrl Service_OSM::reverse_request(const double &lat, const double &lon) //запрос обратного геокодирования
 {
   QUrl url("https://nominatim.openstreetmap.org/reverse");
   QUrlQuery query;
@@ -23,7 +23,7 @@ QUrl Service_OSM::reverse_request(const double &lat, const double &lon)
   return url;
 }
 
-QGeoLocation Service_OSM::reply(const QJsonDocument* doc)
+QGeoLocation Service_OSM::reply(const QJsonDocument* doc) //разбор ответа сервиса
 {
   QGeoLocation loc;
   QGeoAddress addr;
@@ -42,10 +42,10 @@ QGeoLocation Service_OSM::reply(const QJsonDocument* doc)
   tmp = arr.at(0).toObject().value("geometry").toObject();
   label_tmp = arr.at(0).toObject().value("properties").toObject();
   label_tmp =  label_tmp.value("geocoding").toObject();
-  addr.setText(label_tmp.value("label").toString());
+  addr.setText(label_tmp.value("label").toString());  //полный адрес
   arr = tmp.value("coordinates").toArray();
   loc.setAddress(addr);
-  loc.setCoordinate(QGeoCoordinate(arr[1].toDouble(), arr[0].toDouble(),0));
+  loc.setCoordinate(QGeoCoordinate(arr[1].toDouble(), arr[0].toDouble(),0)); // координаты
   return loc;
 }
 

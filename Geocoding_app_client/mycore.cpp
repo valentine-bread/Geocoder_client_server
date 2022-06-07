@@ -35,7 +35,7 @@ void MyCore::setGeocode(QString){}
 QVariantList MyCore::load_out_file(const QUrl &path)
 {
   if (path.isEmpty()) return *address_mas;
-  QFile f(path.fileName());
+  QFile f(path.path().remove(0,1));
   if(!f.open(QFile::ReadOnly | QIODevice::Text)) return *address_mas;
   address_mas->clear();
   while(!f.atEnd()){
@@ -61,8 +61,8 @@ void MyCore::set_address_list(QVariantList list)
 
 void MyCore::save_in_file(const QUrl &path)
 {
-  QFile f(path.fileName());
-
+  if (path.isEmpty()) return;
+  QFile f(path.path().remove(0,1));
   if(!f.open(QFile::WriteOnly | QIODevice::Text)) return;
   QTextStream writeStream(&f);
   for(auto &it : service_list){
@@ -101,8 +101,8 @@ void MyCore::load_API_key(const QVariantMap& key_map)
 
 void MyCore::load_key_out_file(const QUrl &path)
 {
-  QFile f(path.fileName());
-
+  if (path.isEmpty()) return;
+  QFile f(path.path().remove(0,1));
   if(!f.open(QFile::ReadOnly | QIODevice::Text)) return;
   QJsonParseError docErr;
   QJsonDocument doc = QJsonDocument::fromJson(f.readAll(),&docErr);

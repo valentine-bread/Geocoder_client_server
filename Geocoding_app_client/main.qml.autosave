@@ -133,7 +133,7 @@ ApplicationWindow  {
                 marker_list.append({lat : tmp.lat, lon: tmp.lon, line : s, сolour: service_сolour[name.toString()]});
             }
         }
-        mapview.fitViewportToVisibleMapItems();
+        //mapview.fitViewportToVisibleMapItems();
     }
 
     function on_Completed(){

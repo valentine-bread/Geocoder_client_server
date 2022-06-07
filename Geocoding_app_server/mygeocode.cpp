@@ -109,6 +109,7 @@ void My_Geocode::geocoding_list(const QVariantMap &check_map, const QVariantList
 {
   finish_flag = 0;
   for(auto &it : service_list) {
+      it->clear_rez();
       if(check_map.value(it->get_service_name()).toBool() == true){
         finish_flag++;
         it->geocoding_list(address_list, type);

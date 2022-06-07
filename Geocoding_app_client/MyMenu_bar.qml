@@ -69,7 +69,7 @@ MenuBar{
         Action{
             text: "API ключи"
             onTriggered:{
-                input_server_ip.show();
+                select_service_window.show();
             }
         }
     }
@@ -86,7 +86,7 @@ MenuBar{
         onAccepted: {
             if(type == 0){
                 console.log("You chose: " + fileDialog_data.fileUrl);
-                var l = Geocode.load_out_file((fileDialog_data.fileUrl));
+                var l = Geocode.load_out_file(fileDialog_data.fileUrl);
                 address_listModel.clear();
                 for(var i = 0; i !== l.length; i++){
                     address_listModel.append({address: l[i] + ""});

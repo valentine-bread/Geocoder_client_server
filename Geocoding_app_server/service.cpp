@@ -30,7 +30,6 @@ void Service::geocoding_list(const QVariantList& q, const QString& type)
 {
   timer = QTime::currentTime();
   if(q.isEmpty()) return;
-  rez_data->clear();
   if(type == "direct"){
     type_geocoding = 0;
     for(auto &x : (q)){
@@ -94,7 +93,7 @@ void Service::slot_manager(QNetworkReply *rez)
         else this->direct_geocoding();
 }
 
-const int Service::get_time()
+int Service::get_time()
 {
   return time_execution;
 }
@@ -112,4 +111,9 @@ void Service::set_API_key(QString key)
 QString Service::get_API_key()
 {
   return API_key;
+}
+
+void Service::clear_rez()
+{
+  rez_data->clear();
 }

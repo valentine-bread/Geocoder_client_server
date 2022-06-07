@@ -14,7 +14,7 @@ public:
   virtual QGeoLocation reply(const QJsonDocument* doc) = 0;
   virtual QGeoLocation reverse_reply(const QJsonDocument* doc);
   virtual QString get_service_name() = 0;
-  const int get_time();
+  int get_time();
   void direct_geocoding();
   void reverse_geocoding();
   void geocoding_list(const QVariantList&,const QString&);
@@ -22,6 +22,7 @@ public:
   QList<coordinate>* get_rez_data();
   void set_API_key(QString key);
   QString get_API_key();
+  void clear_rez();
 
 
 

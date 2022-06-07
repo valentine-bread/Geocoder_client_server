@@ -57,6 +57,7 @@ void MyTcpServer::onReadyRead()
         case set_service_key:
           {
             geocoder->download_API_key(doc.object().value("service_key").toObject().toVariantMap());
+            geocoder->load_API_key();
             break;
           }
         }
